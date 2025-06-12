@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "start": "electron .",
-    "build": "dotenv electron-builder --win --publish always"
+    "build": "arch -x86_64 dotenv electron-builder --win --x64 --ia32 --publish always"
   },
   "build": {
     "appId": "com.spinfinite.desktop",
