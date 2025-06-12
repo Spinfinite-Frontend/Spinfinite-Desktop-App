@@ -1,12 +1,12 @@
 {
   "name": "spinfinite-desktop",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Official Spinfinite Desktop App",
   "author": "Spinfinite Ltd",
   "main": "index.js",
   "scripts": {
     "start": "electron .",
-    "build": "arch -x86_64 dotenv electron-builder --win --x64 --ia32 --publish always"
+    "build": "arch -x86_64 npx dotenv electron-builder --win --x64 --ia32 --publish always"
   },
   "build": {
     "appId": "com.spinfinite.desktop",
