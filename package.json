@@ -1,6 +1,6 @@
 {
   "name": "spinfinite-desktop",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "description": "Official Spinfinite Desktop App",
   "main": "index.js",
   "scripts": {
@@ -10,13 +10,16 @@
   "build": {
     "appId": "com.spinfinite.desktop",
     "productName": "Spinfinite",
-    "copyright": "Copyright © 2025 Spinfinite Ltd",
+    "copyright": "Copyright © 2025 Spinfinite",
     "directories": {
       "output": "dist"
     },
     "files": [
-      "**/*",
-      "!dist"
+      "!dist/",
+      "!node_modules/.bin",
+      "index.js",
+      "icon.ico",
+      "package.json"
     ],
     "win": {
       "target": "nsis",
@@ -30,6 +33,6 @@
   },
   "devDependencies": {
     "electron": "^36.4.0",
-    "electron-builder": "^24.14.1"
+    "electron-builder": "^26.0.12"
   }
 }

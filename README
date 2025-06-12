@@ -1,0 +1,112 @@
+# 🖥️ Spinfinite Desktop App
+
+This repository contains an Electron-based desktop wrapper for [Spinfinite](https://www.spinfinite.com). It lets you build and distribute a native Windows app that opens the Spinfinite site inside a custom-branded window.
+
+---
+
+## 🚀 Features
+
+- Full Electron wrapper with custom icon and metadata
+- Launches [https://www.spinfinite.com](https://www.spinfinite.com) inside a desktop app
+- Generates a standalone Windows installer
+- Easily branded (icon, title, metadata, etc)
+
+---
+
+## 📆 Requirements
+
+- Node.js (v16 or higher)
+- NPM (comes with Node)
+- macOS, Windows, or Linux
+- If you're building for Windows on macOS: **Wine Crossover** installed
+
+### Install Wine Crossover (macOS only)
+
+```bash
+brew tap gcenx/wine
+brew install --cask --no-quarantine wine-crossover
+```
+
+Then link Wine64:
+
+```bash
+sudo ln -s "/Applications/Wine Crossover.app/Contents/Resources/wine/bin/wine64" /usr/local/bin/wine64
+```
+
+---
+
+## 📁 Getting Started
+
+### 1. Clone the repo
+
+```bash
+git clone https://github.com/yourname/spinfinite-desktop.git
+cd spinfinite-desktop
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Start the app (dev mode)
+
+```bash
+npm start
+```
+
+---
+
+## 🛠️ Building the Installer
+
+To build a Windows `.exe` installer:
+
+```bash
+npm run build
+```
+
+### 📀 Output:
+
+Look in the `dist/` folder:
+
+```
+dist/Spinfinite Setup 1.0.3.exe
+```
+
+This file can be shared or uploaded as the official installer.
+
+---
+
+## ⚠️ Important Notes
+
+- Do **not** commit `node_modules/` or `dist/` — they are excluded in `.gitignore`
+- App icon can be replaced by editing `icon.ico`
+- All metadata (name, version, publisher, etc) can be modified in `package.json` under `build`
+- To distribute your installer, use GitHub Releases instead of pushing binaries to the repo
+
+---
+
+## 📂 Folder Structure
+
+```
+root/
+├── build-win.sh               # Optional build script
+├── icon.ico                   # App icon
+├── index.js                  # Main Electron wrapper
+├── package.json              # App settings & metadata
+└── dist/                     # Output folder for installer (after build)
+```
+
+---
+
+## 📱 Download Installer
+
+Check the [Releases](https://github.com/yourname/spinfinite-desktop/releases) section for the latest prebuilt `.exe`.
+
+---
+
+## 🙋 Need Help?
+
+Open an issue or contact the maintainer. Happy building ✨
+
