@@ -3,3 +3,4 @@
 *.dmg
 *.zip
 /node_modules
+.env

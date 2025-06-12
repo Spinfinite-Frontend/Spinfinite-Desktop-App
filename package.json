@@ -1,11 +1,12 @@
 {
   "name": "spinfinite-desktop",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Official Spinfinite Desktop App",
+  "author": "Spinfinite Ltd",
   "main": "index.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-builder --win"
+    "build": "dotenv electron-builder --win --publish always"
   },
   "build": {
     "appId": "com.spinfinite.desktop",
@@ -29,10 +30,20 @@
       "oneClick": false,
       "perMachine": true,
       "allowToChangeInstallationDirectory": true
+    },
+    "publish": {
+      "provider": "github",
+      "owner": "Spinfinite-Frontend",
+      "repo": "Spinfinite-Desktop-App"
     }
   },
   "devDependencies": {
+    "dotenv-cli": "^8.0.0",
     "electron": "^36.4.0",
-    "electron-builder": "^26.0.12"
+    "electron-builder": "^26.0.12",
+    "electron-log": "^5.1.4"
+  },
+  "dependencies": {
+    "electron-updater": "^6.1.5"
   }
 }
