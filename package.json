@@ -1,6 +1,6 @@
 {
   "name": "spinfinite-desktop",
-  "version": "1.0.11",
+  "version": "1.1.6",
   "description": "Official Spinfinite Desktop App",
   "author": "Spinfinite Ltd",
   "main": "index.js",
@@ -27,14 +27,14 @@
         "target": "nsis",
         "arch": ["x64", "ia32"]
       },
-      "artifactName": "Spinfinite-Setup.exe",
+      "artifactName": "Spinfinite-Desktop-App-Setup.exe",
       "icon": "icon.ico"
     },
     "nsis": {
       "oneClick": false,
       "perMachine": true,
       "allowToChangeInstallationDirectory": true,
-      "displayName": "Spinfinite"
+      "uninstallDisplayName": "Spinfinite Desktop App"
     },
     "publish": {
       "provider": "github",
@@ -43,13 +43,13 @@
       "releaseType": "release"
     }
   },
-  "devDependencies": {
-    "dotenv-cli": "^8.0.0",
-    "electron": "^36.4.0",
-    "electron-builder": "^26.0.12"
-  },
   "dependencies": {
     "electron-log": "^5.1.4",
     "electron-updater": "^6.1.5"
+  },
+  "devDependencies": {
+    "electron": "^36.4.0",
+    "electron-builder": "^26.0.12",
+    "dotenv-cli": "^8.0.0"
   }
 }
