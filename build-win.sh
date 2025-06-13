@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Clean previous builds
+rm -rf dist
+
 # Load .env file
 source .env
 

@@ -3,16 +3,28 @@ const path = require('path');
 const { autoUpdater } = require('electron-updater');
 const log = require('electron-log');
 
-// Logging
+// Setup logging
 autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'info';
 
+// 🧠 Prevent multiple app instances
+const gotTheLock = app.requestSingleInstanceLock();
+if (!gotTheLock) {
+  app.quit();
+  return;
+}
+
+let win;
+
 function createWindow () {
-  const win = new BrowserWindow({
+  win = new BrowserWindow({
     width: 1024,
     height: 768,
     icon: path.join(__dirname, 'icon.ico'),
-    webPreferences: { nodeIntegration: false }
+    backgroundColor: '#2B3241',
+    webPreferences: {
+      nodeIntegration: false
+    }
   });
 
   win.loadURL('https://www.spinfinite.com');
@@ -21,16 +33,23 @@ function createWindow () {
     {
       label: 'Web',
       submenu: [
-        { label: 'Reload', click: () => win.reload() },
+        { label: 'Refresh', click: () => win.reload() },
         { label: 'Back', click: () => win.webContents.canGoBack() && win.webContents.goBack() },
         { label: 'Forward', click: () => win.webContents.canGoForward() && win.webContents.goForward() }
       ]
     },
     {
       label: 'Help',
+  submenu: [
+    {
+      label: 'About',
       submenu: [
         {
-          label: `Check for Updates (v${app.getVersion()})`,
+          label: `Version: v${app.getVersion()}`,
+          enabled: false
+        },
+        {
+          label: 'Check for Updates',
           click: () => {
             autoUpdater.checkForUpdates().then(result => {
               if (!result?.updateInfo || result.updateInfo.version === app.getVersion()) {
@@ -53,25 +72,24 @@ function createWindow () {
         },
         {
           label: 'Made by Anthony',
-          click: () => shell.openExternal('https://www.spinfinite.com')
+          enabled: false
         }
       ]
+    },
+    {
+      label: 'Need Help?',
+      click: () => {
+        shell.openExternal('https://www.spinfinite.com/help/faq/');
+      }
+    }
+  ]
     }
   ];
 
   Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate));
 }
 
-app.whenReady().then(() => {
-  createWindow();
-
-  // Optional delay before checking for updates in-app
-  setTimeout(() => {
-    autoUpdater.checkForUpdates();
-  }, 3000);
-});
-
-// Auto-update popup
+// 🔁 Show popup when update is downloaded
 autoUpdater.on('update-downloaded', () => {
   dialog.showMessageBox({
     type: 'info',
@@ -81,6 +99,23 @@ autoUpdater.on('update-downloaded', () => {
   }).then(() => {
     autoUpdater.quitAndInstall(false, true);
   });
+});
+
+app.whenReady().then(() => {
+  createWindow();
+
+  // ⏱ Short delay to reduce race condition risks
+  setTimeout(() => {
+    autoUpdater.checkForUpdates();
+  }, 3000);
+});
+
+// 🧠 If second instance launched, bring the first window forward
+app.on('second-instance', () => {
+  if (win) {
+    if (win.isMinimized()) win.restore();
+    win.focus();
+  }
 });
 
 app.on('window-all-closed', () => {
