@@ -1,11 +1,15 @@
 const { spawn } = require('child_process');
 const path = require('path');
 
-// Only run the updater, not as an Electron process
-spawn(process.execPath, [path.join(__dirname, 'updater', 'updater.js')], {
-  detached: true,
-  stdio: 'ignore'
-}).unref();
+// ✅ Only spawn updater if not already updating
+if (!process.env.IS_UPDATER) {
+  const updater = spawn(process.execPath, [path.join(__dirname, 'updater', 'updater.js')], {
+    detached: true,
+    stdio: 'ignore',
+    env: { ...process.env, IS_UPDATER: '1' }
+  });
+  updater.unref();
+}
 
-// Now launch main app UI
+// ✅ Then start the main app
 require('./main/main.js');

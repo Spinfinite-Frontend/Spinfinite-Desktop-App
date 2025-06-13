@@ -1,7 +1,7 @@
+// updater/updater.js
 const { autoUpdater } = require('electron-updater');
 const log = require('electron-log');
 
-// No windows, no GUI
 log.transports.file.resolvePath = () => './logs/updater.log';
 autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'info';
@@ -16,7 +16,7 @@ autoUpdater.on('update-downloaded', () => {
   autoUpdater.quitAndInstall();
 });
 
-autoUpdater.checkForUpdates().then(() => {
-  // Exit once check is done
-  setTimeout(() => process.exit(0), 2000);
-});
+// ✅ Only check for updates if this file is run directly
+if (require.main === module) {
+  autoUpdater.checkForUpdates();
+}
