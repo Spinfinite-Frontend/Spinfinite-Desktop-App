@@ -1,6 +1,6 @@
 {
   "name": "spinfinite",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "description": "Official Spinfinite Windows App",
   "author": "Spinfinite Ltd",
   "main": "index.js",

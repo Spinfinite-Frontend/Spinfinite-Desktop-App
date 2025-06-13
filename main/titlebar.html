@@ -1,0 +1,42 @@
+<div id="titlebar">
+  <button onclick="window.api.navAction('back')">←</button>
+  <button onclick="window.api.navAction('forward')">→</button>
+  <button onclick="window.api.navAction('refresh')">⟳</button>
+  <span id="urlDisplay">Loading...</span>
+</div>
+
+<script>
+  const updateUrl = async () => {
+    const url = await window.api.getUrl();
+    document.getElementById('urlDisplay').innerText = url;
+  };
+
+  updateUrl();
+  setInterval(updateUrl, 1000); // keep it fresh
+</script>
+
+<style>
+  #titlebar {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    background: #1e1e2f;
+    color: white;
+    font-family: sans-serif;
+    gap: 10px;
+  }
+  #titlebar button {
+    background: #444;
+    color: white;
+    border: none;
+    padding: 4px 10px;
+    cursor: pointer;
+  }
+  #titlebar button:hover {
+    background: #666;
+  }
+  #urlDisplay {
+    margin-left: auto;
+    user-select: none;
+  }
+</style>
