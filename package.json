@@ -1,6 +1,6 @@
 {
   "name": "spinfinite-desktop",
-  "version": "1.1.12",
+  "version": "1.1.16",
   "description": "Official Spinfinite Desktop App",
   "author": "Spinfinite Ltd",
   "main": "index.js",
@@ -36,7 +36,8 @@
       "oneClick": false,
       "perMachine": true,
       "allowToChangeInstallationDirectory": true,
-      "uninstallDisplayName": "Spinfinite Desktop App"
+      "uninstallDisplayName": "Spinfinite Desktop App",
+      "allowElevation": true
     },
     "publish": {
       "provider": "github",

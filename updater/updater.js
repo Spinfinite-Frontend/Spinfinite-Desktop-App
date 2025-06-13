@@ -15,5 +15,5 @@ autoUpdater.on('update-downloaded', () => {
   autoUpdater.quitAndInstall();
 });
 
-// Run updater directly, no GUI lifecycle
+// Run updater directly without GUI
 autoUpdater.checkForUpdates();

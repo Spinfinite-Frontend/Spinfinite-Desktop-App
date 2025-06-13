@@ -1,14 +1,12 @@
 const { app, BrowserWindow, Menu, shell, dialog } = require('electron');
 const path = require('path');
-
-// ✅ Auto-updater
 const { autoUpdater } = require('electron-updater');
 const log = require('electron-log');
 
 autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'info';
 
-function createWindow () {
+function createWindow() {
   const win = new BrowserWindow({
     width: 1024,
     height: 768,
@@ -33,7 +31,7 @@ function createWindow () {
       label: 'Help',
       submenu: [
         {
-          label: 'Check for Updates',
+          label: `Check for Updates`,
           click: () => {
             autoUpdater.checkForUpdates().then(result => {
               if (!result?.updateInfo || result.updateInfo.version === app.getVersion()) {
@@ -55,6 +53,10 @@ function createWindow () {
           }
         },
         {
+          label: `Version ${app.getVersion()}`,
+          enabled: false
+        },
+        {
           label: 'Made by Anthony',
           click: () => shell.openExternal('https://www.spinfinite.com')
         }
@@ -69,13 +71,13 @@ function createWindow () {
 app.whenReady().then(() => {
   createWindow();
 
-  // ⏱ Delay slightly to avoid early updater failures
+  // ✅ Small delay to avoid race condition
   setTimeout(() => {
     autoUpdater.checkForUpdates();
   }, 2000);
 });
 
-// 🔁 When update is downloaded, force popup & restart
+// ✅ On update downloaded, force install
 autoUpdater.on('update-downloaded', () => {
   dialog.showMessageBox({
     type: 'info',
@@ -83,7 +85,7 @@ autoUpdater.on('update-downloaded', () => {
     message: 'A new version has been downloaded. The app will now restart to install it.',
     buttons: ['Restart']
   }).then(() => {
-    autoUpdater.quitAndInstall(false, true); // ✅ Force quit & silent install
+    autoUpdater.quitAndInstall(false, true); // silent install
   });
 });
 

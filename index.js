@@ -1,15 +1,19 @@
 const { spawn } = require('child_process');
 const path = require('path');
 
-// Prevent loop: only run updater if not launched as updater
-if (process.env.RUNNING_UPDATER !== '1') {
-  const updater = spawn(process.execPath, [path.join(__dirname, 'updater/updater.js')], {
-    detached: true,
-    stdio: 'ignore',
-    env: { ...process.env, RUNNING_UPDATER: '1' } // <- flag this run
-  });
-  updater.unref();
-}
+console.log('>>> Spinfinite main index.js running');
 
-// Then run main app
+const isWindows = process.platform === 'win32';
+const nodeExec = isWindows
+  ? process.execPath.replace(/electron\.exe$/, 'node.exe')
+  : process.execPath.replace(/Electron$/, 'node');
+
+// Run updater as standalone process
+const updater = spawn(nodeExec, [path.join(__dirname, 'updater', 'updater.js')], {
+  detached: true,
+  stdio: 'ignore'
+});
+updater.unref();
+
+// Launch main app
 require('./main/main.js');
