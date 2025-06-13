@@ -1,6 +1,7 @@
 const { autoUpdater } = require('electron-updater');
 const log = require('electron-log');
 
+// No windows, no GUI
 log.transports.file.resolvePath = () => './logs/updater.log';
 autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'info';
@@ -15,5 +16,7 @@ autoUpdater.on('update-downloaded', () => {
   autoUpdater.quitAndInstall();
 });
 
-// Run updater directly without GUI
-autoUpdater.checkForUpdates();
+autoUpdater.checkForUpdates().then(() => {
+  // Exit once check is done
+  setTimeout(() => process.exit(0), 2000);
+});

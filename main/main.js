@@ -3,17 +3,16 @@ const path = require('path');
 const { autoUpdater } = require('electron-updater');
 const log = require('electron-log');
 
+// Logging
 autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'info';
 
-function createWindow() {
+function createWindow () {
   const win = new BrowserWindow({
     width: 1024,
     height: 768,
     icon: path.join(__dirname, 'icon.ico'),
-    webPreferences: {
-      nodeIntegration: false
-    }
+    webPreferences: { nodeIntegration: false }
   });
 
   win.loadURL('https://www.spinfinite.com');
@@ -31,7 +30,7 @@ function createWindow() {
       label: 'Help',
       submenu: [
         {
-          label: `Check for Updates`,
+          label: `Check for Updates (v${app.getVersion()})`,
           click: () => {
             autoUpdater.checkForUpdates().then(result => {
               if (!result?.updateInfo || result.updateInfo.version === app.getVersion()) {
@@ -53,10 +52,6 @@ function createWindow() {
           }
         },
         {
-          label: `Version ${app.getVersion()}`,
-          enabled: false
-        },
-        {
           label: 'Made by Anthony',
           click: () => shell.openExternal('https://www.spinfinite.com')
         }
@@ -64,28 +59,27 @@ function createWindow() {
     }
   ];
 
-  const menu = Menu.buildFromTemplate(menuTemplate);
-  Menu.setApplicationMenu(menu);
+  Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate));
 }
 
 app.whenReady().then(() => {
   createWindow();
 
-  // ✅ Small delay to avoid race condition
+  // Optional delay before checking for updates in-app
   setTimeout(() => {
     autoUpdater.checkForUpdates();
-  }, 2000);
+  }, 3000);
 });
 
-// ✅ On update downloaded, force install
+// Auto-update popup
 autoUpdater.on('update-downloaded', () => {
   dialog.showMessageBox({
     type: 'info',
-    title: 'Update Available',
-    message: 'A new version has been downloaded. The app will now restart to install it.',
+    title: 'Update Ready',
+    message: 'A new version has been downloaded. Restart to install now.',
     buttons: ['Restart']
   }).then(() => {
-    autoUpdater.quitAndInstall(false, true); // silent install
+    autoUpdater.quitAndInstall(false, true);
   });
 });
 

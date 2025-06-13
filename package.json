@@ -1,7 +1,7 @@
 {
-  "name": "spinfinite-desktop",
-  "version": "1.1.16",
-  "description": "Official Spinfinite Desktop App",
+  "name": "spinfinite",
+  "version": "1.2.1",
+  "description": "Official Spinfinite Windows App",
   "author": "Spinfinite Ltd",
   "main": "index.js",
   "scripts": {
@@ -9,7 +9,7 @@
     "build": "arch -x86_64 npx dotenv electron-builder --win --x64 --ia32 --publish always"
   },
   "build": {
-    "appId": "com.spinfinite.desktop",
+    "appId": "com.spinfinite",
     "productName": "Spinfinite",
     "copyright": "Copyright © 2025 Spinfinite",
     "directories": {
@@ -29,20 +29,21 @@
         "target": "nsis",
         "arch": ["x64", "ia32"]
       },
-      "artifactName": "Spinfinite-Desktop-App-Setup.exe",
       "icon": "icon.ico"
     },
     "nsis": {
       "oneClick": false,
       "perMachine": true,
+      "allowElevation": true,
       "allowToChangeInstallationDirectory": true,
-      "uninstallDisplayName": "Spinfinite Desktop App",
-      "allowElevation": true
+      "runAfterFinish": true,
+      "uninstallDisplayName": "Spinfinite",
+      "deleteAppDataOnUninstall": true
     },
     "publish": {
       "provider": "github",
       "owner": "Spinfinite-Frontend",
-      "repo": "Spinfinite-Desktop-App",
+      "repo": "Spinfinite-For-Windows",
       "releaseType": "release"
     }
   },
