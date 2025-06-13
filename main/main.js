@@ -22,12 +22,27 @@ function createWindow () {
     height: 768,
     icon: path.join(__dirname, 'icon.ico'),
     backgroundColor: '#2B3241',
+    frame: true, // ✅ Restore native window controls
     webPreferences: {
-      nodeIntegration: false
+      nodeIntegration: false,
+      contextIsolation: true,
+      enableRemoteModule: false,
+      webviewTag: true,
+      preload: path.join(__dirname, 'preload.js')
     }
   });
 
-  win.loadURL('https://www.spinfinite.com');
+
+  win.loadFile(path.join(__dirname, 'app.html'));
+
+  // 🛰 Update titlebar with current URL
+  win.webContents.on('did-navigate', (_, url) => {
+    win.webContents.send('set-url', url);
+  });
+
+  win.webContents.on('did-navigate-in-page', (_, url) => {
+    win.webContents.send('set-url', url);
+  });
 
   const menuTemplate = [
     {
@@ -40,54 +55,55 @@ function createWindow () {
     },
     {
       label: 'Help',
-  submenu: [
-    {
-      label: 'About',
       submenu: [
         {
-          label: `Version: v${app.getVersion()}`,
-          enabled: false
-        },
-        {
-          label: 'Check for Updates',
-          click: () => {
-            autoUpdater.checkForUpdates().then(result => {
-              if (!result?.updateInfo || result.updateInfo.version === app.getVersion()) {
-                dialog.showMessageBox({
-                  type: 'info',
-                  title: 'No Update Available',
-                  message: 'You’re already on the latest version.',
-                  buttons: ['OK']
+          label: 'About',
+          submenu: [
+            {
+              label: `Version: v${app.getVersion()}`,
+              enabled: false
+            },
+            {
+              label: 'Check for Updates',
+              click: () => {
+                autoUpdater.checkForUpdates().then(result => {
+                  if (!result?.updateInfo || result.updateInfo.version === app.getVersion()) {
+                    dialog.showMessageBox({
+                      type: 'info',
+                      title: 'No Update Available',
+                      message: 'You’re already on the latest version.',
+                      buttons: ['OK']
+                    });
+                  }
+                }).catch(() => {
+                  dialog.showMessageBox({
+                    type: 'error',
+                    title: 'Update Check Failed',
+                    message: 'Could not check for updates. Please try again later.',
+                    buttons: ['OK']
+                  });
                 });
               }
-            }).catch(() => {
-              dialog.showMessageBox({
-                type: 'error',
-                title: 'Update Check Failed',
-                message: 'Could not check for updates. Please try again later.',
-                buttons: ['OK']
-              });
-            });
-          }
+            },
+            {
+              label: 'Made by Anthony',
+              enabled: false
+            }
+          ]
         },
         {
-          label: 'Made by Anthony',
-          enabled: false
+          label: 'Need Help?',
+          click: () => {
+            shell.openExternal('https://www.spinfinite.com/help/faq/');
+          }
         }
       ]
-    },
-    {
-      label: 'Need Help?',
-      click: () => {
-        shell.openExternal('https://www.spinfinite.com/help/faq/');
-      }
-    }
-  ]
     }
   ];
 
   Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate));
 }
+
 
 // 🔁 Show popup when update is downloaded
 autoUpdater.on('update-downloaded', () => {
