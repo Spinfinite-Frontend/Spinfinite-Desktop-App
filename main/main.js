@@ -7,7 +7,7 @@ const log = require('electron-log');
 autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'info';
 
-// 🧠 Prevent multiple app instances
+// Prevent multiple app instances
 const gotTheLock = app.requestSingleInstanceLock();
 if (!gotTheLock) {
   app.quit();
@@ -22,27 +22,14 @@ function createWindow () {
     height: 768,
     icon: path.join(__dirname, 'icon.ico'),
     backgroundColor: '#2B3241',
-    frame: true, // ✅ Restore native window controls
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      enableRemoteModule: false,
-      webviewTag: true,
-      preload: path.join(__dirname, 'preload.js')
+      enableRemoteModule: false
     }
   });
 
-
-  win.loadFile(path.join(__dirname, 'app.html'));
-
-  // 🛰 Update titlebar with current URL
-  win.webContents.on('did-navigate', (_, url) => {
-    win.webContents.send('set-url', url);
-  });
-
-  win.webContents.on('did-navigate-in-page', (_, url) => {
-    win.webContents.send('set-url', url);
-  });
+  win.loadURL('https://www.spinfinite.com');
 
   const menuTemplate = [
     {
@@ -104,8 +91,7 @@ function createWindow () {
   Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate));
 }
 
-
-// 🔁 Show popup when update is downloaded
+// Auto-update popup
 autoUpdater.on('update-downloaded', () => {
   dialog.showMessageBox({
     type: 'info',
@@ -120,13 +106,11 @@ autoUpdater.on('update-downloaded', () => {
 app.whenReady().then(() => {
   createWindow();
 
-  // ⏱ Short delay to reduce race condition risks
   setTimeout(() => {
     autoUpdater.checkForUpdates();
   }, 3000);
 });
 
-// 🧠 If second instance launched, bring the first window forward
 app.on('second-instance', () => {
   if (win) {
     if (win.isMinimized()) win.restore();
